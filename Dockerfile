@@ -1,14 +1,17 @@
-# Use the official Nginx image from Docker Hub as a base image
+# Use the official Nginx image from Docker Hub
 FROM nginx:alpine
 
 # Set the working directory inside the container
 WORKDIR /usr/share/nginx/html
 
-# Copy your HTML, CSS, and JS files into the working directory in the container
+# Copy the HTML, CSS, and JS files to the working directory in the container
 COPY . .
 
-# Expose port 80 to make the app accessible
-EXPOSE 80
+# Copy the custom Nginx configuration file to the container
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Start the Nginx web server when the container starts
+# Expose port 8090
+EXPOSE 8090
+
+# Start the Nginx server
 CMD ["nginx", "-g", "daemon off;"]

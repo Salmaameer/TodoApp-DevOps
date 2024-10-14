@@ -1,0 +1,56 @@
+---
+- name: Deploy To-Do List Application
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Update apt package list
+      apt:
+        update_cache: yes
+
+    - name: Install required dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Remove conflicting containerd package
+      apt:
+        name: containerd
+        state: absent
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Build Docker image
+      command: docker build -t your-todo-app /home/hadeer/DEPI_Project/your-todo-app/
+      args:
+        chdir: /home/hadeer/DEPI_Project/your-todo-app/  # Change this to your project directory
+
+    - name: Run the Docker container
+      docker_container:
+        name: todo-app
+        image: your-todo-app
+        state: started
+        ports:
+          - "8081:80"  # Map port 8081 on the host to port 80 in the container

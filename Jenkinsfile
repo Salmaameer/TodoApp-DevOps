@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId:'github-pat' branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation'
+                git branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation'
             }
         }
 

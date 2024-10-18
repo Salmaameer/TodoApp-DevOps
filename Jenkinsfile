@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation.git'
+                git branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation'
             }
         }
 
@@ -49,7 +49,7 @@ pipeline {
                  body: "Good news! The build was successful."
         }
         failure {
-            mail to: 'm.mohamed112002@gmail.com',
+            mail to: 'salmaameer409@gmail.com',
                  subject: "Jenkins Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                  body: "Oops! The build failed. Please check the Jenkins job for details."
         }

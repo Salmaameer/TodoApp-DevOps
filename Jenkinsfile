@@ -8,6 +8,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git credentialsId: 'github-pat' , branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation.git'
@@ -32,15 +33,12 @@ pipeline {
 
         
 
-        stage('Push Docker image') {
+        stage('Push') {
             steps {
                 script {
-                   
-                       
-                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
-                    // Push the Docker image to Docker Hub
-                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    
+                    docker.withRegistry('https://hub.docker.com/r/dohaelsawi/todo-app', "${DOCKERHUB_CREDENTIALS}") {
+                        docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+                    }
                 }
             }
         }

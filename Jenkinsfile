@@ -33,7 +33,7 @@ pipeline {
 
         
 
-        stage('Push') {
+        stage('Push Docker image') {
             steps {
                 script {
                     // log in to the docker hub
@@ -45,10 +45,18 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+       stage('Ansible Playbook Execution') {
             steps {
-                // Trigger Ansible playbook
-                sh 'ansible-playbook -i inventory.ini playbook.yml'
+                // Use the secret file (the .pem key)
+                withCredentials([file(credentialsId: 'my-ec2-key', variable: 'PEM_KEY')]) {
+                    script {
+                        // Ensure permissions are set correctly for the key
+                        sh "chmod 600 ${PEM_KEY}"
+
+                        // Run your Ansible command with the .pem key
+                        sh "ansible-playbook -i inventory.ini playbook.yml --private-key=${PEM_KEY}"
+                    }
+                }
             }
         }
     }
@@ -58,7 +66,7 @@ pipeline {
             script {
                 // Send an email when the build fails
                 emailext(
-                    to: 'recipient@example.com',
+                    to: 'salmaameer409@gmail.com',
                     subject: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """
                         <p>Build <b>${env.JOB_NAME} #${env.BUILD_NUMBER}</b> failed.</p>

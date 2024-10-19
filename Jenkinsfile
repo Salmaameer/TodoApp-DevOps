@@ -50,16 +50,20 @@ pipeline {
         }
     }
 
-    post {
-        success {
-            mail to: 'm.mohamed112002@gmail.com',
-                 subject: "Jenkins Build Successful: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                 body: "Good news! The build was successful."
-        }
+   post {
         failure {
-            mail to: 'salmaameer409@gmail.com',
-                 subject: "Jenkins Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                 body: "Oops! The build failed. Please check the Jenkins job for details."
+            script {
+                // Send an email when the build fails
+                emailext(
+                    to: 'recipient@example.com',
+                    subject: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                        <p>Build <b>${env.JOB_NAME} #${env.BUILD_NUMBER}</b> failed.</p>
+                        <p>Check console output at <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
         }
     }
 }

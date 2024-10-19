@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "dohaelsawi/todo-app"
         DOCKER_TAG = "latest"
-        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
 
     stages {

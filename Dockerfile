@@ -5,7 +5,8 @@ FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
 # Copy the HTML, CSS, and JS files to the working directory in the container
-COPY . .
+COPY app-files/ .
+#COPY . .
 
 # Copy the custom Nginx configuration file to the container
 COPY nginx.conf /etc/nginx/conf.d/default.conf

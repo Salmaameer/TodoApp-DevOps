@@ -14,6 +14,14 @@ pipeline {
             }
         }
 
+         stage('Check Docker Installation') {
+            steps {
+                script {
+                    // Check if Docker is installed and the daemon is running
+                    sh 'docker info'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {

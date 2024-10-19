@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "dohaelsawi/todo-app"
         DOCKER_TAG = "latest"
-        REGISTRY_CREDENTIAL = 'dockerhub-credentials' 
+        DOCKERHUB_CREDENTIALS = credintials('dockerhub-credentials') 
     }
 
     stages {
@@ -32,12 +32,15 @@ pipeline {
 
         
 
-        stage('Push') {
+        stage('Push Docker image') {
             steps {
                 script {
-                    docker.withRegistry('https://hub.docker.com/r/dohaelsawi/todo-app', "${REGISTRY_CREDENTIAL}") {
-                        docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
-                    }
+                   
+                       
+                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
+                    // Push the Docker image to Docker Hub
+                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    
                 }
             }
         }

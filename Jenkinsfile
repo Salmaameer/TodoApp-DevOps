@@ -56,7 +56,12 @@ pipeline {
             }
         }
       
-
+      stage('Test') {
+          steps {
+              sh 'npm install'
+              sh 'npm test'
+          }
+      }
       stage('Deploy') {
             steps {
                 // Run Ansible playbook to deploy the application

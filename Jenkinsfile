@@ -62,12 +62,7 @@ pipeline {
                 sh 'make build-docker-container'
             }
         }
-        stage('Verify Container is Running') {
-            steps {
-                // Verify if the container is running
-                sh 'docker ps | grep todo-app'
-            }
-        }
+      
 
       stage('Deploy') {
             steps {

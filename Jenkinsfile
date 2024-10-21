@@ -45,17 +45,13 @@ pipeline {
             }
         }
 
-       stage('Ansible Playbook Execution') {
+      stage('Deploy') {
             steps {
-                // Use the secret file (the .pem key)
-                withCredentials([file(credentialsId: 'my-ec2-key', variable: 'PEM_KEY')]) {
-                    script {
-                        // Ensure permissions are set correctly for the key
-                        sh "chmod 600 ${PEM_KEY}"
-
-                        // Run your Ansible command with the .pem key
-                        sh "ansible-playbook -i inventory.ini playbook.yml --private-key=${PEM_KEY}"
-                    }
+                // Run Ansible playbook to deploy the application
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-con-credentials', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        ansible-playbook -i localhost, playbook.yml --private-key $SSH_KEY
+                    '''
                 }
             }
         }

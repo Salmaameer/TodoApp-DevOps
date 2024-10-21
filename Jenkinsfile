@@ -58,6 +58,14 @@ pipeline {
     }
 
    post {
+       success {
+            emailext(
+                subject: "Jenkins Build Successful: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+                body: "Good news! The build was successful.\n\nCheck it out here: ${env.RUN_DISPLAY_URL}",
+                recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                to: 'salmaameer409@gmail.com'
+            )
+        }
         failure {
             script {
                 // Send an email when the build fails

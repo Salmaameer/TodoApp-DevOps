@@ -31,8 +31,6 @@ pipeline {
             }
         }
 
-        
-
         stage('Push Docker image') {
             steps {
                 script {
@@ -42,6 +40,19 @@ pipeline {
                     // Push the Docker image to Docker Hub
                     sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
+            }
+        }
+        
+        stage('Run Docker Container') {
+            steps {
+                // Use Makefile to run the Docker container
+                sh 'make build-docker-container'
+            }
+        }
+        stage('Verify Container is Running') {
+            steps {
+                // Verify if the container is running
+                sh 'docker ps | grep todo-app'
             }
         }
 

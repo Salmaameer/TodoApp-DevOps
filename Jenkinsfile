@@ -44,15 +44,8 @@ pipeline {
         }
          stage('Cleanup Old Container') {
             steps {
-                script {
-                    // Check if the container exists
-                    def containerExists = sh(script: "docker ps -a -q -f name=${DOCKER_IMAGE}", returnStdout: true).trim()
+                sh 'make delete-container'
 
-                    // Stop and remove the old container if it exists
-                    if (containerExists) {
-                        sh "docker stop ${DOCKER_IMAGE} || true"  // Stop the container
-                        sh "docker rm ${DOCKER_IMAGE} || true"    // Remove the container
-                    }
                 }
             }
         }

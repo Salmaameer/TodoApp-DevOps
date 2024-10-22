@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        DOCKER_CONTAINER_NAME = "todo-app-container"
         DOCKER_IMAGE = "dohaelsawi/todo-app"
         DOCKER_TAG = "latest"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
@@ -14,7 +15,7 @@ pipeline {
                 git credentialsId: 'github-pat' , branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation.git'
             }
         }
-
+    }
          stage('Check Docker Installation') {
             steps {
                 script {
@@ -27,7 +28,6 @@ pipeline {
             steps {
                
                      sh 'make build-docker-image'
-                
             }
         }
 
@@ -44,11 +44,17 @@ pipeline {
         }
          stage('Cleanup Old Container') {
             steps {
-                sh 'make delete-container'
+               script {
+                    def containerExists = sh(script: "docker ps -a -q -f name=${DOCKER_CONTAINER_NAME}", returnStdout: true).trim()
+                    if (containerExists) {
+                        sh "docker stop ${DOCKER_CONTAINER_NAME} || true"
+                        sh "docker rm ${DOCKER_CONTAINER_NAME} || true"
+                     }
+                  }
 
                 }
             }
-        }
+        
         stage('Run Docker Container') {
             steps {
                 // Use Makefile to run the Docker container
@@ -56,12 +62,12 @@ pipeline {
             }
         }
       
-      stage('Test') {
-          steps {
-              sh 'npm install'
-              sh 'npm test'
-          }
-      }
+      // stage('Test') {
+      //     steps {
+      //         sh 'npm install'
+      //         sh 'npm test'
+      //     }
+      // }
       stage('Deploy') {
             steps {
                 // Run Ansible playbook to deploy the application

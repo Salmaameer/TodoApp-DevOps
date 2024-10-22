@@ -8,7 +8,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
 
-    stages {  // Wrap all stages inside the `stages` block
+    stages {  
 
         stage('Debug') {
             steps {

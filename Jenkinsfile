@@ -10,6 +10,14 @@ pipeline {
 
     stages {  // Wrap all stages inside the `stages` block
 
+        stage('Debug') {
+            steps {
+                sh 'echo "Running as: $(whoami)"'
+                sh 'docker --version'
+                sh 'make --version'
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 git credentialsId: 'github-pat' , branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation.git'

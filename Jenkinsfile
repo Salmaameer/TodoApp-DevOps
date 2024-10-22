@@ -15,7 +15,7 @@ pipeline {
                 git credentialsId: 'github-pat' , branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation.git'
             }
         }
-    }
+    
          stage('Check Docker Installation') {
             steps {
                 script {

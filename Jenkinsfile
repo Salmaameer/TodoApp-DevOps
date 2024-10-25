@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_CONTAINER_NAME = "todo-app-container"
         DOCKER_IMAGE = "dohaelsawi/todo-app"
+        DOCKER_CONTAINER_NAME = "todo-app-container"
         DOCKER_TAG = "latest"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
@@ -20,7 +21,7 @@ pipeline {
         
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-pat' , branch: 'master', url: 'https://github.com/Salmaameer/TodoApp-devops-automation.git'
+                git credentialsId: 'github-pat' , branch: 'master', url: 
             }
         }
 
@@ -50,6 +51,15 @@ pipeline {
         stage('Cleanup Old Container') {
             steps {
                 script {
+                    // Check if the container exists
+                    def containerExists = sh(script: "docker ps -a -q -f name=${DOCKER_CONTAINER_NAME}", returnStdout: true).trim()
+
+                    // Stop and remove the old container if it exists
+                    if (containerExists) {
+                        sh "docker stop ${DOCKER_CONTAINER_NAME} || true"  // Stop the container
+                        sh "docker rm ${DOCKER_CONTAINER_NAME} || true"    // Remove the container
+                    }
+                script {
                     def containerExists = sh(script: "docker ps -a -q -f name=${DOCKER_CONTAINER_NAME}", returnStdout: true).trim()
                     if (containerExists) {
                         sh "docker stop ${DOCKER_CONTAINER_NAME} || true"
@@ -58,6 +68,7 @@ pipeline {
                 }
             }
         }
+        
 
         stage('Run Docker Container') {
             steps {
@@ -91,7 +102,7 @@ pipeline {
                 subject: "Jenkins Build Successful: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                 body: "Good news! The build was successful.\n\nCheck it out here: ${env.RUN_DISPLAY_URL}",
                 recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-                to: 'salmaameer409@gmail.com'
+                to: 
             )
         }
         failure {

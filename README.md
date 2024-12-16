@@ -23,7 +23,6 @@ TodoApp DevOps Automation is a full CI/CD setup for a simple Todo application. I
 - **Docker** for containerization
 - **AWS EC2** for deployment
 - **GitHub** for version control
-- **Java/Spring Boot** as the primary technology for the TodoApp
 - **Shell Scripts** for automation tasks
 
 ## Features

@@ -65,16 +65,8 @@ TodoApp DevOps Automation is a full CI/CD setup for a simple Todo application. I
 2. **Access the Application**
    - Once deployed, access the TodoApp via your EC2 instance's public IP.
 
-## File Structure
 
-```
-TodoApp-devops-automation/
-├── Jenkinsfile               # Pipeline as code
-├── Dockerfile                # Docker setup for the application
-├── scripts/                  # Automation scripts for setup and deployment
-├── src/                      # Source code for TodoApp
-└── README.md                 # Project documentation
-```
+
 
 ## Contributing
 
